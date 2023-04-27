@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+torch.manual_seed(42)
+
 class WeightNet(nn.Module):
     def __init__(self, input_size, output_size, dropout_rate=0.5):
         super(WeightNet, self).__init__()
@@ -13,6 +15,10 @@ class WeightNet(nn.Module):
         self.fc4 = nn.Linear(64, 32)
         self.bn4 = nn.BatchNorm1d(32)
         self.fc5 = nn.Linear(32, output_size)
+
+        nn.init.constant_(self.fc5.weight, 1/3)
+        nn.init.constant_(self.fc5.bias, 0)
+
         self.dropout = nn.Dropout(dropout_rate)
         
     def forward(self, x):
